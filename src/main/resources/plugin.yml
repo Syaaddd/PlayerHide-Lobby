@@ -1,0 +1,20 @@
+name: PlayerHide-Lobby
+version: '${project.version}'
+main: com.github.Syaaddd.playerHideLobby.PlayerHideLobby
+api-version: '1.21'
+author: Syaaddd
+description: Plugin untuk hide/show players di lobby dengan toggle item
+
+commands:
+  playerhide:
+    description: Command utama plugin PlayerHide
+    usage: /playerhide <reload>
+    permission: playerhide.admin
+
+permissions:
+  playerhide.use:
+    description: Izin untuk menggunakan fitur hide player
+    default: true
+  playerhide.admin:
+    description: Izin admin untuk reload plugin
+    default: op

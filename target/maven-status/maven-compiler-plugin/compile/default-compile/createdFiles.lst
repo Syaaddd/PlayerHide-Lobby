@@ -1,0 +1,7 @@
+com\github\Syaaddd\playerHideLobby\utils\ItemBuilder.class
+com\github\Syaaddd\playerHideLobby\listeners\InventoryLockListener.class
+com\github\Syaaddd\playerHideLobby\PlayerHideLobby.class
+com\github\Syaaddd\playerHideLobby\listeners\ToggleInteractListener.class
+com\github\Syaaddd\playerHideLobby\managers\PlayerHiderManager.class
+com\github\Syaaddd\playerHideLobby\listeners\PlayerJoinListener.class
+com\github\Syaaddd\playerHideLobby\managers\ToggleItemManager.class
