@@ -1,9 +1,13 @@
 package com.github.Syaaddd.playerHideLobby.managers;
 
 import com.github.Syaaddd.playerHideLobby.PlayerHideLobby;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.server.level.ServerPlayer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +39,8 @@ public class PlayerHiderManager {
         for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
             if (!onlinePlayer.equals(player)) {
                 player.hidePlayer(plugin, onlinePlayer);
+                // Re-add ke tab list agar economy plugin tetap bisa menemukan player
+                restoreTabListEntry(player, onlinePlayer);
             }
         }
     }
@@ -49,10 +55,33 @@ public class PlayerHiderManager {
 
     public void updateHiddenForNewPlayer(Player newPlayer) {
         for (UUID uuid : hiddenPlayers) {
-            Player hiddenPlayer = plugin.getServer().getPlayer(uuid);
-            if (hiddenPlayer != null && hiddenPlayer.isOnline()) {
-                hiddenPlayer.hidePlayer(plugin, newPlayer);
+            if (uuid.equals(newPlayer.getUniqueId())) continue;
+            Player hidingPlayer = plugin.getServer().getPlayer(uuid);
+            if (hidingPlayer != null && hidingPlayer.isOnline()) {
+                hidingPlayer.hidePlayer(plugin, newPlayer);
+                restoreTabListEntry(hidingPlayer, newPlayer);
             }
+        }
+    }
+
+    public void handlePlayerQuit(Player player) {
+        hiddenPlayers.remove(player.getUniqueId());
+    }
+
+    /**
+     * Mengembalikan entry tab list player yang di-hide agar economy plugin
+     * masih bisa resolve nama player tersebut.
+     * hidePlayer() menghapus player dari tab list client — ini mengembalikannya
+     * tanpa membatalkan visual hide.
+     */
+    private void restoreTabListEntry(Player viewer, Player target) {
+        try {
+            ServerPlayer nmsTarget = ((CraftPlayer) target).getHandle();
+            ClientboundPlayerInfoUpdatePacket packet =
+                ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(nmsTarget));
+            ((CraftPlayer) viewer).getHandle().connection.send(packet);
+        } catch (Exception e) {
+            plugin.getLogger().warning("[PlayerHide] Gagal restore tab list: " + e.getMessage());
         }
     }
 }

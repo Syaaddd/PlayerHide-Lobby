@@ -1,7 +1,9 @@
 package com.github.Syaaddd.playerHideLobby;
 
-import com.github.Syaaddd.playerHideLobby.listeners.PlayerJoinListener;
+import com.github.Syaaddd.playerHideLobby.listeners.AdminSendCommandListener;
 import com.github.Syaaddd.playerHideLobby.listeners.InventoryLockListener;
+import com.github.Syaaddd.playerHideLobby.listeners.PlayerJoinListener;
+import com.github.Syaaddd.playerHideLobby.listeners.PlayerQuitListener;
 import com.github.Syaaddd.playerHideLobby.listeners.ToggleInteractListener;
 import com.github.Syaaddd.playerHideLobby.managers.PlayerHiderManager;
 import com.github.Syaaddd.playerHideLobby.managers.ToggleItemManager;
@@ -16,21 +18,26 @@ public final class PlayerHideLobby extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        
+
         playerHiderManager = new PlayerHiderManager(this);
         toggleItemManager = new ToggleItemManager(this);
-        
+
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryLockListener(this), this);
         getServer().getPluginManager().registerEvents(new ToggleInteractListener(this), this);
-        
-        getLogger().info("PlayerHide-Lobby telah diaktifkan!");
-        getLogger().info("Default: Hide Player ON saat join");
+        getServer().getPluginManager().registerEvents(new AdminSendCommandListener(this), this);
+
+        // Daftarkan channel BungeeCord untuk fitur /send current <server>
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        getLogger().info("PlayerHide-Lobby enabled! Default: Hide ON saat join.");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("PlayerHide-Lobby telah dimatikan!");
+        getServer().getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
+        getLogger().info("PlayerHide-Lobby disabled.");
     }
 
     public static PlayerHideLobby getInstance() {
