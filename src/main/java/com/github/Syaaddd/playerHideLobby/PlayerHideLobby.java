@@ -29,14 +29,13 @@ public final class PlayerHideLobby extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AdminSendCommandListener(this), this);
 
         // Daftarkan channel BungeeCord untuk fitur /send current <server>
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+//        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         getLogger().info("PlayerHide-Lobby enabled! Default: Hide ON saat join.");
     }
 
     @Override
     public void onDisable() {
-        getServer().getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
         getLogger().info("PlayerHide-Lobby disabled.");
     }
 

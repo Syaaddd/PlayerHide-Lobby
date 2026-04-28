@@ -1,4 +1,6 @@
+com\github\Syaaddd\playerHideLobby\listeners\PlayerQuitListener.class
 com\github\Syaaddd\playerHideLobby\utils\ItemBuilder.class
+com\github\Syaaddd\playerHideLobby\listeners\AdminSendCommandListener.class
 com\github\Syaaddd\playerHideLobby\listeners\PlayerJoinListener$1.class
 com\github\Syaaddd\playerHideLobby\listeners\InventoryLockListener.class
 com\github\Syaaddd\playerHideLobby\PlayerHideLobby.class

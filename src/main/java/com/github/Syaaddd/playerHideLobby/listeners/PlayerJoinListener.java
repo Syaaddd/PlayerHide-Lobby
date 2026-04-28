@@ -20,21 +20,18 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        // Delay 1 detik untuk menghindari konflik dengan DeluxeHub
+        // Hide langsung — tidak ada delay
+        plugin.getPlayerHiderManager().setPlayerHidden(player, true);
+        plugin.getPlayerHiderManager().updateHiddenForNewPlayer(player);
+
+        // Item diberikan setelah DeluxeHub selesai mengatur hotbar
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (player.isOnline()) {
-                    // Berikan toggle item ke slot 8 (terakhir hotbar)
                     plugin.getToggleItemManager().giveToggleItem(player, true);
-
-                    // Default: Hide player ON saat join
-                    plugin.getPlayerHiderManager().setPlayerHidden(player, true);
-
-                    // Update pemain lain yang sedang hide untuk juga hide pemain baru ini
-                    plugin.getPlayerHiderManager().updateHiddenForNewPlayer(player);
                 }
             }
-        }.runTaskLater(plugin, 20L); // 20 ticks = 1 detik
+        }.runTaskLater(plugin, 20L);
     }
 }
